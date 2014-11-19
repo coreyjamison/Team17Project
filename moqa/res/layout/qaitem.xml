@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+    	
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
 
     <Button
         android:id="@+id/createCommentButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/MoQAButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/upvoteButton"
@@ -26,16 +26,16 @@
 
     <Button
         android:id="@+id/favoriteButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/MoQAButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/createCommentButton"
+        android:layout_alignBottom="@+id/createCommentButton"
         android:layout_toRightOf="@+id/createCommentButton"
         android:text="@string/favorite" />
 
     <Button
         android:id="@+id/viewAttachmentButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/MoQAButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/favoriteButton"
@@ -45,8 +45,9 @@
 
     <TextView
         android:id="@+id/bodyText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/MoQATextView" 
+        android:layout_marginTop="@dimen/moqa_large_space"       
+        android:layout_height="wrap_content"        
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/titleText"
         android:ems="10"
@@ -57,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/bodyText"
+        android:layout_below="@+id/bodyText"   
         android:ems="10"
         android:text="author" />
 
@@ -72,7 +73,7 @@
 
     <Button
         android:id="@+id/upvoteButton"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/MoQAButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

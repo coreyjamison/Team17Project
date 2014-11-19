@@ -1,0 +1,29 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+	<style name="MoQAButton" parent="android:attr/buttonStyleSmall">
+        <item name="android:background">@drawable/moqabutton</item>
+        <item name="android:textColor">@color/milk</item>      
+        <item name="android:textSize">@dimen/moqa_small_text</item>
+        <item name="android:minHeight">0dp</item>        
+        <item name="android:shadowColor">@color/cafe_noir</item>  
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">5</item> 
+        <item name="android:layout_marginLeft">@dimen/moqa_button_spacing</item>
+        <item name="android:layout_marginRight">@dimen/moqa_button_spacing</item>
+        <item name="android:layout_marginTop">@dimen/moqa_small_space</item>
+    </style>
+    
+	<style name="MoQATheme" parent="@style/AppTheme"> 
+  		<item name="android:windowBackground">@color/milk</item>
+	</style>
+	
+	<style name="MoQAEditText">
+	    <item name="android:background">@drawable/moqaedittext</item>	    
+	</style>
+	
+	<style name="MoQATextView">
+	    <item name="android:background">@drawable/moqatextview</item>
+	    <item name="android:textColor">@color/cafe_noir</item>
+	    <item name="android:layout_width">match_parent</item>
+	</style>
+</resources>

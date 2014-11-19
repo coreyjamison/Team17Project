@@ -12,7 +12,7 @@
 
     <Button
         android:id="@+id/createAnswer"
-        style="?android:attr/buttonStyleSmall"
+        style="@style/MoQAButton"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:text="@string/createAnswer" />
