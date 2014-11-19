@@ -10,7 +10,7 @@
         android:id="@+id/usernameText"  
         style="@style/MoQAEditText"  
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_below="@+id/loginWarning"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="114dp"
@@ -32,6 +32,28 @@
         android:layout_below="@+id/usernameText"
         android:layout_marginTop="27dp"
         android:text="Sign In" />
+    
+    <Button
+        android:id="@+id/browseButton"
+        style="@style/MoQAButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/usernameText" 
+        android:layout_below="@+id/signInButton"
+        android:layout_marginTop="27dp"
+        android:text="Browse Questions"
+        android:visibility="gone" />
+    
+    <Button
+        android:id="@+id/askButton"
+        style="@style/MoQAButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"      
+        android:layout_alignLeft="@+id/usernameText" 
+        android:layout_below="@+id/signInButton"
+        android:layout_marginTop="27dp"
+        android:text="Ask question"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/loginWarning"
