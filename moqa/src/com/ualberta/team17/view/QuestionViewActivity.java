@@ -42,7 +42,12 @@ public class QuestionViewActivity extends Activity implements IQAView {
 	private QuestionItem mQuestion;
 	private ArrayList<QABody> mQABodies;
 	protected QAController mController;	
-	protected QABodyAdapter mAdapter;	
+	protected QABodyAdapter mAdapter;
+	
+	private enum Mode {
+		CREATE,
+		DISPLAY
+	}
 	
 	/**
 	 * Constructor
@@ -123,20 +128,43 @@ public class QuestionViewActivity extends Activity implements IQAView {
 		mAdapter = createNewAdapter();
 		
 		if (intent.getSerializableExtra(QUESTION_ID_EXTRA) != null) {
+			setMode(Mode.DISPLAY);
+			
 			UniqueId id = UniqueId.fromString((String)intent.getSerializableExtra(QUESTION_ID_EXTRA));
 			queryQuestion(id);			
 		} else {
+			setMode(Mode.CREATE);
+			
+			Button submitButton = (Button) createQuestionView.findViewById(R.id.createQuestionSubmitButton);
+			EditText titleText = (EditText) createQuestionView.findViewById(R.id.createQuestionTitleView);
+			EditText bodyText = (EditText) createQuestionView.findViewById(R.id.createQuestionBodyView);
+			
+			submitButton.setOnClickListener(new SubmitQuestionListener(titleText, bodyText));
+			
+			/*
 			AddQuestionPopup popup = new AddQuestionPopup(QuestionViewActivity.this);
 			popup.show();
 			
 			if (getQuestion() != null) {				
 				ListView qaList = (ListView) displayQuestionView.findViewById(R.id.qaItemView);
 				qaList.setAdapter(mAdapter);
-			}
+			}*/
 		}
 		
 	}
 	
+	public void setMode(Mode mode) {
+			View displayQuestionView = findViewById(R.id.displayQuestionView);
+		View createQuestionView = findViewById(R.id.createQuestionView);
+		
+		if(mode == Mode.CREATE) {
+			displayQuestionView.setVisibility(View.GONE);
+			createQuestionView.setVisibility(View.VISIBLE);
+		} else if(mode == Mode.DISPLAY) {
+			displayQuestionView.setVisibility(View.VISIBLE);
+			createQuestionView.setVisibility(View.GONE);
+		}
+	}
 	
 
 	public void favoriteQuestion(View v) {
@@ -170,6 +198,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 		resetContent();
 		mQuestion = question;
 		mQABodies.add(new QABody(question));
+		refresh();
 	}
 	
 	private void resetContent() {
@@ -311,6 +340,11 @@ public class QuestionViewActivity extends Activity implements IQAView {
 				answerCountView.setVisibility(View.VISIBLE);
 				
 				titleTextView.setText(question.getTitle());
+				if(question.getReplyCount() == 1) {
+					answerCountView.setText("1 Answer");
+				} else {
+					answerCountView.setText(Integer.toString(question.getReplyCount()) + " Answers");
+				}
 				favoriteButton.setOnClickListener(new FavoriteListener(question));
 				
 			} else if (qaItem.parent.mType == ItemType.Answer) {
@@ -408,6 +442,23 @@ public class QuestionViewActivity extends Activity implements IQAView {
 			}
 			qaList.invalidate();
 			qaList.setAdapter(createNewAdapter());			
+		}
+		
+	}
+	
+	private class SubmitQuestionListener implements View.OnClickListener {
+		EditText mTitleView;
+		EditText mBodyView;
+
+		public SubmitQuestionListener(EditText titleView, EditText bodyView) {
+			mTitleView = titleView;
+			mBodyView = bodyView;
+		}
+		@Override
+		public void onClick(View v) {
+			QAController controller = QAController.getInstance();
+			setMode(Mode.DISPLAY);
+			setQuestion(controller.createQuestion(mTitleView.getText().toString(), mBodyView.getText().toString()));
 		}
 		
 	}
