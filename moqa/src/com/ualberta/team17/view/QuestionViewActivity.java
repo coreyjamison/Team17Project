@@ -140,15 +140,6 @@ public class QuestionViewActivity extends Activity implements IQAView {
 			EditText bodyText = (EditText) createQuestionView.findViewById(R.id.createQuestionBodyView);
 			
 			submitButton.setOnClickListener(new SubmitQuestionListener(titleText, bodyText));
-			
-			/*
-			AddQuestionPopup popup = new AddQuestionPopup(QuestionViewActivity.this);
-			popup.show();
-			
-			if (getQuestion() != null) {				
-				ListView qaList = (ListView) displayQuestionView.findViewById(R.id.qaItemView);
-				qaList.setAdapter(mAdapter);
-			}*/
 		}
 		
 	}
