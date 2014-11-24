@@ -331,9 +331,9 @@ public class QuestionViewActivity extends Activity implements IQAView {
 				
 				titleTextView.setText(question.getTitle());
 				if(question.getReplyCount() == 1) {
-					answerCountView.setText("1 Answer");
+					answerCountView.setText(getString(R.string.answer_count_one));
 				} else {
-					answerCountView.setText(Integer.toString(question.getReplyCount()) + " Answers");
+					answerCountView.setText(String.format(getString(R.string.answer_count), question.getReplyCount()));
 				}
 				favoriteButton.setOnClickListener(new FavoriteListener(question));
 				
