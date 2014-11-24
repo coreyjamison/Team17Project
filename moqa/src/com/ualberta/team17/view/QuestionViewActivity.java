@@ -70,7 +70,6 @@ public class QuestionViewActivity extends Activity implements IQAView {
 		questionChildrenResult.addObserver(new CommentResultListener(), ItemType.Comment);		
 	}	
 	
-	
 	/**
 	 * Method that queries the controller for a question based on Id
 	 * @author Joel
