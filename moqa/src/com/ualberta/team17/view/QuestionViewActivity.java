@@ -144,7 +144,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 	}
 	
 	public void setMode(Mode mode) {
-			View displayQuestionView = findViewById(R.id.displayQuestionView);
+		View displayQuestionView = findViewById(R.id.displayQuestionView);
 		View createQuestionView = findViewById(R.id.createQuestionView);
 		
 		if(mode == Mode.CREATE) {
