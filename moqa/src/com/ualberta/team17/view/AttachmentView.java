@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -48,14 +49,29 @@ public class AttachmentView extends HorizontalScrollView {
 	}
 
 	private void init(AttributeSet attrs, int defStyle) {
+		Context context = getContext();
+		
 		// Create the linear layout
 		baseLayout = new LinearLayout(getContext());
 		baseLayout.setOrientation(LinearLayout.HORIZONTAL);
 		baseLayout.setId(LAYOUT_VIEW_ID);
 		
+		// Get the xml configuration
+		TypedArray a = context.getTheme().obtainStyledAttributes(
+				attrs,
+				R.styleable.AttachmentView,
+				0, 0);
+		
+		try{
+			mAddingEnabled = a.getBoolean(R.styleable.AttachmentView_addingEnabled, false);
+		} finally {
+			a.recycle();
+		}
+		
+		
 		// Create the add attachment view
 		mAddAttachmentView = new ImageView(getContext());
-		mAddAttachmentView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_new_attachment_large));
+		mAddAttachmentView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_new_attachment));
 		mAddAttachmentView.setVisibility(getAddingEnabled() ? ImageView.VISIBLE : ImageView.GONE);
 		mAddAttachmentView.setLayoutParams(new LinearLayout.LayoutParams(this.getHeight(), LayoutParams.MATCH_PARENT));
 		mAddAttachmentView.setOnClickListener(new AddAttachmentOnClickListener());

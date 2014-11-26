@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:moqa="http://schemas.android.com/apk/res/com.ualberta.team17.view"
+    
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -54,13 +56,38 @@
 	    <EditText
 	        android:id="@+id/createQuestionBodyView"
 	        android:layout_below="@id/createQuestionTitleView"
-	        android:layout_above="@id/createQuestionBodyView"
+	        android:layout_above="@+id/createQuestionAttachmentsView"
 	        android:layout_width="match_parent"
 	        android:layout_height="fill_parent"
 	        android:gravity="left|top"
 	        android:background="@color/milk2"
 	        android:text="Body"
 	        />
+	    <RelativeLayout
+	        android:id="@+id/createQuestionAttachmentsView"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/createQuestionSubmitButton"
+	        android:background="@color/milk" >
+    
+	  		<LinearLayout
+	  		    android:id="@+id/createQuestionAttachmentsDisplayView"
+	  		    android:orientation="horizontal"
+	  		    android:layout_toLeftOf="@+id/createQuestionAttachmentsAddButton"
+	  		    android:layout_height="wrap_content"
+	  		    android:layout_width="fill_parent"
+	  		    android:padding="10sp"
+	  		    />
+	  		
+	  		<ImageButton 
+	  		    android:id="@+id/createQuestionAttachmentsAddButton"
+	  		    android:layout_height="wrap_content"
+	  		    android:layout_width="wrap_content"
+	  		    android:layout_alignParentRight="true"
+	  		    android:layout_centerVertical="true"
+	  		    android:src="@drawable/ic_action_new_attachment"
+	        	android:background="?android:selectableItemBackground" />
+  		</RelativeLayout>
 	    
 	    <Button
 	        android:id="@+id/createQuestionSubmitButton"

@@ -1,9 +1,13 @@
 package com.ualberta.team17.view;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ualberta.team17.AnswerItem;
+import com.ualberta.team17.AttachmentItem;
 import com.ualberta.team17.AuthoredTextItem;
 import com.ualberta.team17.CommentItem;
 import com.ualberta.team17.ItemType;
@@ -24,14 +28,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,6 +50,11 @@ public class QuestionViewActivity extends Activity implements IQAView {
 	
 	private QuestionItem mQuestion;
 	private ArrayList<QABody> mQABodies;
+	
+	// Data for questions under construction
+	private ArrayList<Bitmap> mImages;
+	private LinearLayout mImageView;
+	
 	protected QAController mController;	
 	protected QABodyAdapter mAdapter;
 	
@@ -54,6 +68,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 	 */
 	public QuestionViewActivity() {
 		mQABodies = new ArrayList<QABody>();
+		mImages = new ArrayList<Bitmap>();
 	}
 		
 	/**
@@ -68,7 +83,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 		IncrementalResult questionChildrenResult = mController.getChildren(question, new DateComparator());
 		questionChildrenResult.addObserver(new AnswerResultListener(), ItemType.Answer);
 		questionChildrenResult.addObserver(new CommentResultListener(), ItemType.Comment);		
-	}	
+	}
 	
 	/**
 	 * Method that queries the controller for a question based on Id
@@ -138,7 +153,16 @@ public class QuestionViewActivity extends Activity implements IQAView {
 			EditText titleText = (EditText) createQuestionView.findViewById(R.id.createQuestionTitleView);
 			EditText bodyText = (EditText) createQuestionView.findViewById(R.id.createQuestionBodyView);
 			
+			View attachmentsView = createQuestionView.findViewById(R.id.createQuestionAttachmentsView);
+			ImageButton addAttachmentButton = (ImageButton) attachmentsView.findViewById(R.id.createQuestionAttachmentsAddButton);
+			mImageView = (LinearLayout) attachmentsView.findViewById(R.id.createQuestionAttachmentsDisplayView);
+			
 			submitButton.setOnClickListener(new SubmitQuestionListener(titleText, bodyText));
+			addAttachmentButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					addAttachment();					
+				}
+			});
 		}
 		
 	}
@@ -264,6 +288,42 @@ public class QuestionViewActivity extends Activity implements IQAView {
 		return null;
 	}
 	
+	private static final int IMAGE_REQUEST = 1888;
+	
+	private void addAttachment() {
+		Intent imageIntent = new Intent();
+		imageIntent.setType("image/*");
+		imageIntent.setAction(Intent.ACTION_GET_CONTENT);
+		imageIntent.addCategory(Intent.CATEGORY_OPENABLE);
+		
+		startActivityForResult(imageIntent, IMAGE_REQUEST);
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
+			Bitmap bitmap = null;
+			try {
+				InputStream stream = getContentResolver().openInputStream(data.getData());
+				bitmap = BitmapFactory.decodeStream(stream);
+				stream.close();
+				mImages.add(bitmap);
+				addImage(bitmap);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	private void addImage(Bitmap b) {
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		ImageView image = (ImageView) inflater.inflate(R.layout.attachment_image, mImageView, false);
+		image.setImageBitmap(b);
+		mImageView.addView(image);
+	}
+	
 	/**
 	 * This class holds a Question/Answer and its child Comments.
 	 * 
@@ -334,6 +394,12 @@ public class QuestionViewActivity extends Activity implements IQAView {
 					answerCountView.setText(getString(R.string.answer_count_one));
 				} else {
 					answerCountView.setText(String.format(getString(R.string.answer_count), question.getReplyCount()));
+				}
+				
+				if(question.isFavorited()) {
+					favoriteButton.setImageResource(R.drawable.ic_action_important);
+				} else {
+					favoriteButton.setImageResource(R.drawable.ic_action_not_important);
 				}
 				favoriteButton.setOnClickListener(new FavoriteListener(question));
 				
@@ -518,9 +584,9 @@ public class QuestionViewActivity extends Activity implements IQAView {
 	}
 	
 	private class AddAttachmentListener implements View.OnClickListener {
-
 		@Override
 		public void onClick(View v) {
+			addAttachment();
 		}
 		
 	}
