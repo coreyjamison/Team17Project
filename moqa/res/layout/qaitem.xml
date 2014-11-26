@@ -103,14 +103,20 @@
         android:orientation="vertical" >
     </LinearLayout>
     
+    <com.ualberta.team17.view.AttachmentView 
+        android:id="@+id/attachmentView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/commentView" />"
+    
     <TextView 
         android:id="@+id/answerCountView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/commentView"
+        android:layout_below="@+id/attachmentView"
        	style="@style/bodyText1Alt"
         android:text="5 Answers"
-        android:gravity="center"/>
+        android:gravity="center" />
 
 </RelativeLayout>

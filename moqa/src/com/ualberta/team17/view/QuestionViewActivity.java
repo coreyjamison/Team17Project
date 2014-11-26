@@ -48,10 +48,12 @@ import android.widget.TextView;
 public class QuestionViewActivity extends Activity implements IQAView {
 	public final static String QUESTION_ID_EXTRA = "question_id";
 	
+	// Data for question that is being displayed.
 	private QuestionItem mQuestion;
 	private ArrayList<QABody> mQABodies;
+	private ArrayList<AttachmentItem> mAttachments;
 	
-	// Data for questions under construction
+	// Data for question under construction
 	private ArrayList<Bitmap> mImages;
 	private LinearLayout mImageView;
 	
@@ -69,6 +71,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 	public QuestionViewActivity() {
 		mQABodies = new ArrayList<QABody>();
 		mImages = new ArrayList<Bitmap>();
+		mAttachments = new ArrayList<AttachmentItem>();
 	}
 		
 	/**
@@ -135,6 +138,9 @@ public class QuestionViewActivity extends Activity implements IQAView {
 		View displayQuestionView = findViewById(R.id.displayQuestionView);
 		View createQuestionView = findViewById(R.id.createQuestionView);
 		
+		View attachmentsView = createQuestionView.findViewById(R.id.createQuestionAttachmentsView);
+		mImageView = (LinearLayout) attachmentsView.findViewById(R.id.createQuestionAttachmentsDisplayView);
+		
 		Intent intent = this.getIntent();
 		mController = QAController.getInstance();		
 		
@@ -145,17 +151,15 @@ public class QuestionViewActivity extends Activity implements IQAView {
 			setMode(Mode.DISPLAY);
 			
 			UniqueId id = UniqueId.fromString((String)intent.getSerializableExtra(QUESTION_ID_EXTRA));
-			queryQuestion(id);			
+			queryQuestion(id);
+			
 		} else {
 			setMode(Mode.CREATE);
 			
 			Button submitButton = (Button) createQuestionView.findViewById(R.id.createQuestionSubmitButton);
 			EditText titleText = (EditText) createQuestionView.findViewById(R.id.createQuestionTitleView);
 			EditText bodyText = (EditText) createQuestionView.findViewById(R.id.createQuestionBodyView);
-			
-			View attachmentsView = createQuestionView.findViewById(R.id.createQuestionAttachmentsView);
 			ImageButton addAttachmentButton = (ImageButton) attachmentsView.findViewById(R.id.createQuestionAttachmentsAddButton);
-			mImageView = (LinearLayout) attachmentsView.findViewById(R.id.createQuestionAttachmentsDisplayView);
 			
 			submitButton.setOnClickListener(new SubmitQuestionListener(titleText, bodyText));
 			addAttachmentButton.setOnClickListener(new View.OnClickListener() {
@@ -379,6 +383,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 			ImageButton upvoteButton = (ImageButton) userBar.findViewById(R.id.upvoteButton);
 			
 			LinearLayout commentsView = (LinearLayout) qaItemView.findViewById(R.id.commentView);
+			AttachmentView attachmentView = (AttachmentView) qaItemView.findViewById(R.id.attachmentView);
 			
 			QABody qaItem = mObjects.get(position);
 			if(qaItem.parent.mType == ItemType.Question) {
@@ -388,6 +393,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 				favoriteButton.setVisibility(View.VISIBLE);
 				attachmentButton.setVisibility(View.VISIBLE);
 				answerCountView.setVisibility(View.VISIBLE);
+				attachmentView.setVisibility(View.VISIBLE);
 				
 				titleTextView.setText(question.getTitle());
 				if(question.getReplyCount() == 1) {
@@ -403,12 +409,16 @@ public class QuestionViewActivity extends Activity implements IQAView {
 				}
 				favoriteButton.setOnClickListener(new FavoriteListener(question));
 				
+				for(AttachmentItem a: mAttachments) {
+					attachmentView.addAttachment(a);
+				}
+				
 			} else if (qaItem.parent.mType == ItemType.Answer) {
 				titleTextView.setVisibility(View.GONE);
 				favoriteButton.setVisibility(View.GONE);
 				attachmentButton.setVisibility(View.GONE);
 				answerCountView.setVisibility(View.GONE);
-				
+				attachmentView.setVisibility(View.GONE);
 			} else {
 				// This should never happen. If it does, a bad object was added to the list.
 				throw new IllegalStateException();
@@ -513,7 +523,12 @@ public class QuestionViewActivity extends Activity implements IQAView {
 		public void onClick(View v) {
 			QAController controller = QAController.getInstance();
 			setMode(Mode.DISPLAY);
-			setQuestion(controller.createQuestion(mTitleView.getText().toString(), mBodyView.getText().toString()));
+			QuestionItem question = controller.createQuestion(mTitleView.getText().toString(), mBodyView.getText().toString());
+			setQuestion(question);
+			for(Bitmap b : mImages) {
+				AttachmentItem attachment = controller.createAttachment(question.mUniqueId, "", b);
+				mAttachments.add(attachment);
+			}
 		}
 		
 	}
