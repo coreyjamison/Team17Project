@@ -106,7 +106,7 @@
     <com.ualberta.team17.view.AttachmentView 
         android:id="@+id/attachmentView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
         android:layout_below="@+id/commentView" />"
     
     <TextView 
@@ -118,5 +118,13 @@
        	style="@style/bodyText1Alt"
         android:text="5 Answers"
         android:gravity="center" />
+    
+    <ImageView 
+        android:id="@+id/testAttachmentView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/answerCountView"
+        android:src="@drawable/ic_action_attachment"
+        android:background="@color/milk"/>
 
 </RelativeLayout>

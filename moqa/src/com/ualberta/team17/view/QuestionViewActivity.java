@@ -384,6 +384,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 			
 			LinearLayout commentsView = (LinearLayout) qaItemView.findViewById(R.id.commentView);
 			AttachmentView attachmentView = (AttachmentView) qaItemView.findViewById(R.id.attachmentView);
+			ImageView test = (ImageView) qaItemView.findViewById(R.id.testAttachmentView);
 			
 			QABody qaItem = mObjects.get(position);
 			if(qaItem.parent.mType == ItemType.Question) {
@@ -411,6 +412,7 @@ public class QuestionViewActivity extends Activity implements IQAView {
 				
 				for(AttachmentItem a: mAttachments) {
 					attachmentView.addAttachment(a);
+					test.setImageBitmap(a.getImage());
 				}
 				
 			} else if (qaItem.parent.mType == ItemType.Answer) {
